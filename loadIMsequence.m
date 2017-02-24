@@ -12,6 +12,12 @@ Nslices=numel(str2double(idFirst):str2double(idLast));
 %Load first image to get image size
 IM=imread([FileInfo.path, filesep, FileInfo.prefix, ...
     FileInfo.id_start, FileInfo.ext]);
+%Combine double stitched image to single image
+[~,~,IMdepth]=size(IM);
+if IMdepth == 3
+    IM=imadd(immultiply(IM(:,:,1),0.5),immultiply(IM(:,:,2),0.5));
+end
+
 %preallocate memory
 CTstack = zeros([size(IM),Layer, Nslices],class(IM));
 %Get images
