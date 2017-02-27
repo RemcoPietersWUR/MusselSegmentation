@@ -124,15 +124,18 @@ end
 
 %Plots
 VarPlot=table2array(SliceProps);
-scatter(A(:,1),A(:,2),2,'filled')
+scatter(VarPlot(:,1),VarPlot(:,2),2,'filled')
 xlabel('Height (px)')
 ylabel('Cross sectional area (px)')
 figure
-s1=scatter3(A(:,3),A(:,4),A(:,1),2,[0,0,1],'filled');
+s1=scatter3(VarPlot(:,3),VarPlot(:,4),VarPlot(:,1),2,[0,0,1],'filled');
 hold on
-s2=scatter3(A(:,10),A(:,11),A(:,1),2,[1,0,0],'filled');
+s2=scatter3(VarPlot(:,10),VarPlot(:,11),VarPlot(:,1),2,[1,0,0],'filled');
 hold off
 xlabel('X (px)')
 ylabel('Y (px)')
 zlabel('Height (px)')
 title('Centroid of shell part (Blue none weighted,Red density weighted)')
+
+%Simpel plaatje
+%imshow(BWthres(:,:,400))
