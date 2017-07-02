@@ -9,7 +9,7 @@ overlay = cat(3, zeros(size(BW)), ...
 imshow(IM)
 hold on
 hfig = imshow(overlay); 
-set(hfig, 'AlphaData', immultiply(BW,IM)) 
+set(hfig, 'AlphaData', 0.5*immultiply(BW,IM)) 
 hold off
 title(header);
 end
