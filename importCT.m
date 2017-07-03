@@ -1,7 +1,7 @@
 function [FileInfo] = importCT
 %Locate files
 [filename, path] = uigetfile({'*.jpg;*.tif;*.png;*.gif','All Image Files';...
-         '*.*','All Files' },'Select image');
+         '*.*','All Files' },'Select reconstructed cross-section');
 [pathIM,filenameIM,extIM] = fileparts(fullfile(path,filename));
 %Find alphathic part of the filename
 prefixIM=filenameIM(1:find(isstrprop(filenameIM, 'alpha'),1,'last'));

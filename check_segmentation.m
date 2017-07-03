@@ -1,4 +1,3 @@
-%check_seg
 function [BWfill,BWline]=check_segmentation(BWfill,BWline,CT,method,se)
 %Slider GUI
 scrsz = get(groot,'ScreenSize');
@@ -20,6 +19,7 @@ imshowpair(BWfill(:,:,startSlice),CT(:,:,startSlice),method)
 hold on
 perim = bwperim(BWfill(:,:,startSlice));
 [I,J]=ind2sub([px,py],find(perim));
+disp('contour')
 plot(J,I,'.r')
 hold off
 % Callback function slider
@@ -32,6 +32,7 @@ hold off
         perim = bwperim(BWfill(:,:,slice));
         [I,J]=ind2sub([px,py],find(perim));
         plot(J,I,'.r')
+        disp('contour')
         %Update slider text
         set(hTxt, 'String',['Slice ',num2str(slice)]);
         hold off

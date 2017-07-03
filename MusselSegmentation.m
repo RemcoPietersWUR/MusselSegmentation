@@ -1,9 +1,20 @@
 %Mussel segmentation
 clear all
 close all
+
+%Segmentation parameters
+%Sensitivity edge-detection
+sigmaCanny=2.5;
+%Structering element for morphological closing 
+se=strel('disk',1);
+%Structering element for morphological opening 
+se2=strel('disk',3);
+%Remove objects equal or smaller than 200 px
+areaopen = false;
+
 %%Get file info CT images
-%FileInfo = importCT; %TEMP for debug
-load FileInfo.mat;
+FileInfo = importCT; %TEMP for debug
+%load FileInfo.mat;
 %%Load image sequence in memory
 FirstSlice = FileInfo.id_start; %First slice for segmentation, type char
 LastSlice = '0500';%FileInfo.id_stop %Last slice for segmentation, type char
@@ -18,8 +29,8 @@ ui_slice = floor(ui_slice/2);
 clear CTstack
 
 %Select processing region between foot and nose
-%pos_foot_nose=processing_selection(IMrot,'X');
-pos_foot_nose=[14,512;499,512];
+pos_foot_nose=processing_selection(IMrot,'X');
+%pos_foot_nose=[14,512;499,512];
 %Make substack
 IMrot=IMrot(:,:,floor(pos_foot_nose(1,1)):floor(pos_foot_nose(2,1)));
 
@@ -75,7 +86,7 @@ end
 % end
 
 %Edge detection, Canny method: double threshold less effected by noise
-sigmaCanny=2.5;
+sigmaCanny=sigmaCanny;
 %foot-nose
 %Preallocation
 BWcanny_xy=true(size(CTgauss));
@@ -91,7 +102,7 @@ end
 BWedge_xy=BWcanny_xy|BWsobel_xy;
 clear BWcanny_xy BWsobel_xy
 %lateral
-sigmaCanny=2.5;
+sigmaCanny=sigmaCanny;
 BWcanny_yz=true(size(CTgauss));
 BWsobel_yz=true(size(CTgauss));
 ThresCanny_yz=zeros(2,px_x);
@@ -145,7 +156,7 @@ end
 
 BWclean=or(BWclean_xy,BWclean_yz);
 clear BWclean_xy BWclean_yz
-se=strel('disk',1);
+se=se;
 
 for id=1:px_z
     %Remove single isolated pixels
@@ -173,9 +184,14 @@ BWline=or(BWclean2,BWclean);
 %BWdil = imdilate(BWclean, [se0,se90]);
 BWfill=true(size(CTgauss));
 %Fill in 2D
-se2=strel('disk',5);
+se2=se2;
 for id=1:px_z
-    BWfill(:,:,id)=bwareaopen(BWclean2(:,:,id),200,4);
+    if areaopen 
+   BWfill(:,:,id)=bwareaopen(BWclean2(:,:,id),200,4);
+    else
+    BWfill(:,:,id)=BWclean2(:,:,id);
+    end
+BWfill(:,:,id)=bwareaopen(BWclean2(:,:,id),200,4);
 BWfill(:,:,id) = imfill(BWfill(:,:,id),'holes');
 BWfill(:,:,id)=bwmorph(BWfill(:,:,id),'remove');
 BWfill(:,:,id)=imclose(BWfill(:,:,id),se);
@@ -205,7 +221,7 @@ end
 %Slider GUI
 % type='Area'; %or 'Outline'
 % slider(FirstSlice,LastSlice,IMrot,BWfinal,type)
-
+slider_showpair(BWfill,IMrot,'falsecolor')
 uisave({'IMrot','BWline','BWfill','px_x','px_y','px_z','se2','FileInfo'},[FileInfo.prefix,'.mat']);
 
 
