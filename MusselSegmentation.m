@@ -13,11 +13,11 @@ se2=strel('disk',3);
 areaopen = false;
 
 %%Get file info CT images
-FileInfo = importCT; %TEMP for debug
+FileInfo = importCT; 
 %load FileInfo.mat;
 %%Load image sequence in memory
 FirstSlice = FileInfo.id_start; %First slice for segmentation, type char
-LastSlice = '0500';%FileInfo.id_stop %Last slice for segmentation, type char
+LastSlice = FileInfo.id_stop; %Last slice for segmentation, type char
 CTstack=loadIMsequence(FileInfo,FirstSlice,LastSlice,1);
 
 %%Orientate mussel
@@ -191,7 +191,6 @@ for id=1:px_z
     else
     BWfill(:,:,id)=BWclean2(:,:,id);
     end
-BWfill(:,:,id)=bwareaopen(BWclean2(:,:,id),200,4);
 BWfill(:,:,id) = imfill(BWfill(:,:,id),'holes');
 BWfill(:,:,id)=bwmorph(BWfill(:,:,id),'remove');
 BWfill(:,:,id)=imclose(BWfill(:,:,id),se);

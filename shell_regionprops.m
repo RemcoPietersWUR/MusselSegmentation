@@ -1,15 +1,11 @@
 function shell_regionprops(BWfill,IMrot,px_z)
 %Calculate region properties
 %first for slice 1 to determine size table
-stats = regionprops('table',BWfill(:,:,1),IMrot(:,:,1),'Area',...
-    'BoundingBox','Centroid','Perimeter','MaxIntensity','MeanIntensity',...
-    'MinIntensity','WeightedCentroid');
+stats = regionprops('table',BWfill(:,:,1),IMrot(:,:,1),'Area','Perimeter');
 Slice = ones(height(stats),1).*1;
 ShellProps = [table(Slice),stats];
 for id = 2:px_z
-stats = regionprops('table',BWfill(:,:,id),IMrot(:,:,id),'Area',...
-    'BoundingBox','Centroid','Perimeter','MaxIntensity','MeanIntensity',...
-    'MinIntensity','WeightedCentroid');
+stats = regionprops('table',BWfill(:,:,id),IMrot(:,:,id),'Area','Perimeter');
 Slice = ones(height(stats),1).*id;
 ShellProps = [ShellProps;[table(Slice),stats]];
 end
