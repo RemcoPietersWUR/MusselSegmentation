@@ -4,11 +4,19 @@ function [BWfillnew,BWlinenew] = IMclose_gap(BWfill,BWoutline2,CT)
 %BWoutline2 = BWclean2
 %Select 
 %title('Select shell contour by double clicking on it')
-BW2 = bwselect(BWoutline2,4); %indices available
-
-h_im=imshow(imfuse(BW2,CT,'falsecolor'));
-h = imfreehand(gca,'Closed',false);
+ %indices available
+scrsz = get(groot,'ScreenSize');
+        hFig2 = figure('OuterPosition',[0 0.05*scrsz(4) scrsz(3) 0.95*scrsz(4)]);
+        BW2 = bwselect(BWoutline2,4);
+        close(hFig2)
+                hFig3 = figure('OuterPosition',[0 0.05*scrsz(4) scrsz(3) 0.95*scrsz(4)]);
+        hAx = axes('Parent',hFig3);
+imshow(imfuse(BW2,CT,'falsecolor'));
+h = imfreehand(hAx,'Closed',false);
+if exist('h')>0
 line_coord=round(getPosition(h));
+end
+close(hFig3)
 BW3=false(size(BW2));
 for id = 1:length(line_coord)
     BW3(line_coord(id,2),line_coord(id,1))=1;

@@ -21,7 +21,6 @@ perim = bwperim(BWfill(:,:,startSlice));
 [I,J]=ind2sub([px,py],find(perim));
 
 plot(J,I,'.r')
-hold off
 % Callback function slider
     function slider_callback(sld, eventdata)
         %Get slide number from slider position
@@ -35,7 +34,7 @@ hold off
        
         %Update slider text
         set(hTxt, 'String',['Slice ',num2str(slice)]);
-        hold off
+    
     end
 % Callback function Edit
     function edit_callback(btn, eventdata)
@@ -43,12 +42,14 @@ hold off
         slice = round(get(sld,'Value'));
         BWedit = IMclose_gap(BWfill(:,:,slice),BWline(:,:,slice),CT(:,:,slice));
         BWfill(:,:,slice)=imopen(BWedit,se);
+        figure(hFig)
         imshowpair(BWfill(:,:,slice),CT(:,:,slice),method);
         hold on
         perim = bwperim(BWfill(:,:,slice));
         [I,J]=ind2sub([px,py],find(perim));
         plot(J,I,'.r')
-        hold off
+        set(hTxt, 'String',['Slice ',num2str(slice)]);
+
     end
 uiwait(hFig);
 end
