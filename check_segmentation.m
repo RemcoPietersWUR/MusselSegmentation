@@ -40,7 +40,7 @@ plot(J,I,'.r')
     function edit_callback(btn, eventdata)
         %Get slide number from slider position
         slice = round(get(sld,'Value'));
-        BWedit = IMclose_gap(BWfill(:,:,slice),BWline(:,:,slice),CT(:,:,slice));
+        [BWedit,BWline(:,:,slice)] = IMclose_gap(BWfill(:,:,slice),BWline(:,:,slice),CT(:,:,slice));
         BWfill(:,:,slice)=imopen(BWedit,se);
         figure(hFig)
         imshowpair(BWfill(:,:,slice),CT(:,:,slice),method);

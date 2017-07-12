@@ -20,6 +20,7 @@ close(hFig3)
 BW3=false(size(BW2));
 for id = 1:length(line_coord)
     BW3(line_coord(id,2),line_coord(id,1))=1;
+    BW3=bwmorph(BW3,'diag');
 end
 %imshow(BW3);
 %uiwait
